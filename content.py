@@ -1,6 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
-import os
+from password import Password
+import pyperclip
 
 
 class Content:
@@ -33,13 +34,15 @@ class Content:
         self.save_btn = Button(text="Save", width=47, command=self.save)
         self.save_btn.grid(column=1, row=4, columnspan=2)
 
-        self.open_file_btn = Button(text="Open file", width=47, state="disabled")
-        self.open_file_btn.grid(column=1, row=5, columnspan=2)
-
-        self.check_existed_file()
+        # Password instance
+        self.password_instance = Password()
 
     def generate_password(self):
-        print("Password has been generated.")
+        generated_password = self.password_instance.generate_password()
+
+        pyperclip.copy(generated_password)
+        self.password_input.delete(0, END)
+        self.password_input.insert(0, generated_password)
 
     def save(self):
         website_data = self.website_input.get()
@@ -66,11 +69,3 @@ class Content:
                     self.website_input.delete(0, END)
                     self.email_input.delete(0, END)
                     self.password_input.delete(0, END)
-
-
-    def open_file(self):
-        print("File has been opened")
-
-    def check_existed_file(self):
-        if os.path.exists("data.txt"):
-            self.open_file_btn.config(state="normal", command=self.open_file)
