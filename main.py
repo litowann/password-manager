@@ -3,22 +3,13 @@ from tkinter import *
 # Window config
 window = Tk()
 window.title('Password manager')
-window.config(padx=20, pady=20)
+window.config(padx=50, pady=50)
 
 # Canvas config
 canvas = Canvas(width=200, height=200)
 logo_image = PhotoImage(file="logo.png", width=200, height=200)
-canvas.create_image(130, 100, image=logo_image)
+canvas.create_image(135, 100, image=logo_image)
 canvas.grid(column=1, row=0)
-
-
-def generate_password():
-    print("Password has been generated.")
-
-
-def add():
-    print("New data has been added.")
-
 
 # Labels config
 website_label = Label(text="Website:")
@@ -43,6 +34,23 @@ password_input.grid(column=1, row=3)
 
 
 # Buttons config
+def generate_password():
+    print("Password has been generated.")
+
+
+def add():
+    website_data = website_input.get()
+    email_data = email_input.get()
+    password_data = password_input.get()
+
+    with open("data.txt", "w") as data:
+        data.write(f"{website_data} | {email_data} | {password_data}")
+
+    website_input.delete(0, END)
+    email_input.delete(0, END)
+    password_input.delete(0, END)
+
+
 generate_password_btn = Button(text="Generate Password", width=20, command=generate_password)
 generate_password_btn.grid(column=2, row=3)
 
