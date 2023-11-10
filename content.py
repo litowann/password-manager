@@ -94,4 +94,4 @@ class Content:
                                                                    f"Email/Username: {email}\n"
                                                                    f"Password: {password}")
         except KeyError:
-            messagebox.showinfo(title="Data info", message="No such data!")
+            messagebox.showinfo(title="Data info", message=f"Did not manage to find this website '{website_data}'")
