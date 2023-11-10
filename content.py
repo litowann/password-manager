@@ -19,8 +19,8 @@ class Content:
         self.password_label.grid(column=0, row=3)
 
         # Inputs config
-        self.website_input = Entry(width=50)
-        self.website_input.grid(column=1, row=1, columnspan=2)
+        self.website_input = Entry(width=26)
+        self.website_input.grid(column=1, row=1)
 
         self.email_input = Entry(width=50)
         self.email_input.grid(column=1, row=2, columnspan=2)
@@ -34,6 +34,9 @@ class Content:
 
         self.save_btn = Button(text="Save", width=47, command=self.save)
         self.save_btn.grid(column=1, row=4, columnspan=2)
+
+        self.search_btn = Button(text="Search", width=20, command=self.find_data)
+        self.search_btn.grid(column=2, row=1)
 
         # Password instance
         self.password_instance = Password()
@@ -75,3 +78,20 @@ class Content:
                 self.website_input.delete(0, END)
                 self.email_input.delete(0, END)
                 self.password_input.delete(0, END)
+
+    def find_data(self):
+        website_data = self.website_input.get()
+
+        try:
+            with open("data.json", "r") as data:
+                data_file = json.load(data)
+
+                email = data_file[website_data]["email"]
+                password = data_file[website_data]["password"]
+
+                if website_data in data_file:
+                    messagebox.showinfo(title="Data info", message=f"Website: {website_data}\n"
+                                                                   f"Email/Username: {email}\n"
+                                                                   f"Password: {password}")
+        except KeyError:
+            messagebox.showinfo(title="Data info", message="No such data!")
