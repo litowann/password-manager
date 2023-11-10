@@ -2,6 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 from password import Password
 import pyperclip
+import json
 
 
 class Content:
@@ -49,23 +50,28 @@ class Content:
         email_data = self.email_input.get()
         password_data = self.password_input.get()
 
+        data_structure = {
+            website_data: {
+                "email": email_data,
+                "password": password_data
+            }
+        }
+
         if not len(website_data) or not len(email_data) or not len(password_data):
             messagebox.showwarning(title="Fields validation warning", message="All fields are required!")
 
         else:
-            is_okay = messagebox.askokcancel(
-                title="Generated data",
-                message=f"These data will be entered:\n"
-                        f"Website: {website_data}\n"
-                        f"Email/Username: {email_data}\n"
-                        f"Password: {password_data}\n"
-                        f"Do you want to save it?",
-            )
+            try:
+                with open("data.json", "r") as data:
+                    data_file = json.load(data)
+                    data_file.update(data_structure)
 
-            if is_okay:
-                with open("data.txt", "a") as data:
-                    data.write(f"{website_data} | {email_data} | {password_data}\n")
-
-                    self.website_input.delete(0, END)
-                    self.email_input.delete(0, END)
-                    self.password_input.delete(0, END)
+                with open("data.json", "w") as data:
+                    json.dump(data_file, data, indent=4)
+            except FileNotFoundError:
+                with open("data.json", "w") as data:
+                    json.dump(data_structure, data, indent=4)
+            finally:
+                self.website_input.delete(0, END)
+                self.email_input.delete(0, END)
+                self.password_input.delete(0, END)
